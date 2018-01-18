@@ -7,3 +7,13 @@
 
 # Ignore data folder
 data/*
+
+# LaTeX cruft 
+*.bbl 
+*.blg
+*.log 
+*.pdf 
+
+# Mac things 
+.DS_Store
+ 

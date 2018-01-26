@@ -1,5 +1,7 @@
 manuscript = report
 latexopt = -file-line-error -halt-on-error
+dataurl = https://www.dropbox.com/s/k692avun0144n90/lab0_spectral_data.txt
+datamd5 = https://www.dropbox.com/s/6jquiryg6jskii0/lab0_spectral_data.md5
 
 # Build the PDF of the lab report from the source files
 $(manuscript).pdf: $(manuscript).tex text/*.tex references.bib images/*.png
@@ -11,7 +13,8 @@ $(manuscript).pdf: $(manuscript).tex text/*.tex references.bib images/*.png
 
 # Get/download necessary data
 data :
-	echo "WARNING: make data has not yet been implemented."
+	cd code/ && wget $(datamd5) $(dataurl)
+	cd code/ && cat lab0_spectral_data.txt | md5sum --check lab0_spectral_data.md5
 
 # Validate that downloaded data is not corrupted
 validate :

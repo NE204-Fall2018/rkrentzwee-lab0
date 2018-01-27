@@ -14,11 +14,12 @@ $(manuscript).pdf: $(manuscript).tex text/*.tex references.bib images/*.png
 
 # Get/download necessary data
 data :
-	cd code/ && wget $(datamd5) $(dataurl)
+	[[ -d data ]] || mkdir data 
+	cd data/ && wget $(datamd5) $(dataurl)
 
 # Validate that downloaded data is not corrupted
 validate :
-	cd code/ && cat ${data}.txt | md5sum --check ${data}.md5 
+	cd data/ && cat ${data}.txt | md5sum --check ${data}.md5 
 
 # Run tests on analysis code
 test :

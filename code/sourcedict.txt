@@ -1,0 +1,9 @@
+# Dictionary of known energy peaks for some elements  
+# Ref: S.Y.F. Chu, L.P. Ekstro m, and R. B. Firestone, The Lund/LBNL Nuclear Data Search, v. 2.0, Feb. 1999, http://nucleardata.nuclear.lu.se/nucleardata/toi/. 
+{'Am241':(59.5412),
+         'Ba133':(80.8983,276.398,302.853,356.017,383.851), 
+         'Cs137':(661.657),
+         'Co69':(1173.237,1332.501), 
+         'Eu152':(121.7817,244.6975,344.2785,411.1163,778.9040,867.373,964.079,1085.869,1112.069,1212.948,1299.140,1408.006), 
+         'Cd109':(88.04), 
+         'Th228':(238.6,583.2,2614.5)} 

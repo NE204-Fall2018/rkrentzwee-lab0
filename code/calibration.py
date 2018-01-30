@@ -4,36 +4,42 @@ from modelling import gaus
 from scipy.optimize import curve_fit
 from operator import itemgetter  
 from scipy.stats import linregress 
+import ast 
 
-# Dictionary of known energy peaks for some elements  
-# Ref: S.Y.F. Chu, L.P. Ekstro m, and R. B. Firestone, The Lund/LBNL Nuclear Data Search, v. 2.0, Feb. 1999, http://nucleardata.nuclear.lu.se/nucleardata/toi/. 
-peaks = {'Am241':(59.5412),
-         'Ba133':(80.8983,276.398,302.853,356.017,383.851), 
-         'Cs137':(661.657),
-         'Co69':(1173.237,1332.501), 
-         'Eu152':(121.7817,244.6975,344.2785,411.1163,778.9040,867.373,964.079,1085.869,1112.069,1212.948,1299.140,1408.006), 
-         'Cd109':(88.04), 
-         'Th228':(238.6,583.2,2614.5)} 
+def loadref(filepath): 
+  '''
+  load elements and known energy peaks as a list 
+  '''
+  with open(filepath,'r') as inf: 
+    peaks = ast.literal_eval(inf.read()) 
+  return peaks 
 
-# load saved spectra 
-spectra = np.loadtxt('data/lab0_spectral_data.txt',unpack=True) 
-# TODO: read the source list in from comment line 1 
-source_list = ('Am241', 'Ba133', 'Cs137', 'Co60', 'Eu152') 
+def loaddata(filepath): 
+  '''
+  load saved spectra 
+  '''
+  spectra = np.loadtxt('data/lab0_spectral_data.txt',unpack=True) 
+  # TODO: read the source list in from comment line 1 
+  source_list = ('Am241', 'Ba133', 'Cs137', 'Co60', 'Eu152') 
+  return source_list, spectra
 
-def calibrate(ElementList): 
+def calibrate(ElementList,source_list,spectra,peaks): 
   '''
   Pass in a list of single-peak elements to use in calibration  
-  Return the linear regression for calibration 
+  Return the linear regression for calibration
+  Currently only works for elements with a single energy peak  
   '''
-  # better would be to look up by element - find number of peaks to search for, 
+  # better would be to look up by element - know number of peaks to search for, fit each 
 
-  #cal_peaks = (peaks[source_list[0]], peaks[source_list[2]]) 
+  # get the reference peak energies  
   cal_peaks = itemgetter(*ElementList)(peaks) 
+  # load the spectra for calibration 
   cal_spectra = np.vstack((spectra[source_list.index(ElementList[0])],spectra[source_list.index(ElementList[1])])) 
-  centroids = [] 
-  
+
+  # find and fit the peak in each spectra 
+  centroids = []   
   for item in cal_spectra: 
-    plt.plot(item) 
+#    plt.plot(item) 
     a0 = np.max(item) 
     b0 = np.argmax(item) 
     c0 = 3 
@@ -42,16 +48,15 @@ def calibrate(ElementList):
     counts = item[b0-(2*c0):b0+1+(2*c0)]
     popt, pcov = curve_fit(gaus,width,counts,p0=p0)
     width2 = np.arange(b0-(2*c0),b0+1+(2*c0),0.1)
-    plt.plot(width2,gaus(width2,*popt))
+#    plt.plot(width2,gaus(width2,*popt))
     # automate a zoomed in image of fit
     centroids.append(popt[1]) 
   
+  # fit a linear regression to the saved centroids and the reference peak energies 
   m, b, _, _, _ = linregress(centroids, cal_peaks)
   return m, b 
 
-# now validate by finding centroids and comparing calculated energy w real peaks 
-# get relative maxima, apply gaussian to find centroids, compare with actual 
-def validate(Element,m,b): 
+def validate(Element,m,b,source_list,spectra,peaks): 
   '''
   given an element name, returns the percent error for each energy peak 
   
@@ -63,11 +68,12 @@ def validate(Element,m,b):
   tuples of true energy peak, calibrated peak, and percent error 
   ''' 
   spectrum = spectra[source_list.index(Element)]
-  plt.plot(spectrum)  
+#  plt.plot(spectrum)  
   TruePeaks = peaks[Element] 
   obs_peak = []
-  final = [('True Peak Energy','Observed Peak Energy', 'Relative Error')] 
-  # search for peaks in spectra, guessing they're near the true peak value 
+  errors = np.empty([len(TruePeaks),3]) 
+#  header = np.array(['True Peak Energy','Observed Peak Energy', 'Relative Error']) 
+  # search for peaks in spectra near the true peak values 
   for i in TruePeaks: 
     b0 = int((i-b)/m)
     a0 = spectrum[b0]
@@ -77,10 +83,13 @@ def validate(Element,m,b):
     counts = spectrum[b0-(2*c0):b0+1+(2*c0)]
     popt, pcov = curve_fit(gaus,width,counts,p0=p0)
     width2 = np.arange(b0-(2*c0),b0+1+(2*c0),0.1)
-    plt.plot(width2,gaus(width2,*popt))
+#    plt.plot(width2,gaus(width2,*popt))
     obs_peak.append(popt[1]*m + b)
+
+  #calculate the percent error for each value 
   for i in range(len(obs_peak)): 
-     relerr = abs(TruePeaks[i] - obs_peak[i])/TruePeaks[i] 
-     final.append((TruePeaks[i], obs_peak[i],relerr)) 
-  # save final as text file for table? Save as image for table? 
-  return final 
+     relerr = 100 * (abs(TruePeaks[i] - obs_peak[i])/TruePeaks[i])
+     errors[i] = [TruePeaks[i], obs_peak[i],relerr]
+  # save final as text file for table? Save as image for table?
+  np.savetxt('validation%s.csv' % str(Element), errors, delimiter=' & ', fmt='%.3f', newline=' \\\\\n') 
+  return errors

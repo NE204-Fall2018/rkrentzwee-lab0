@@ -1,25 +1,31 @@
-The calibration was done with Am-241 and Cs-137. For each spectrum, the main peak was found at fit with a Gaussian using scipy.optimize.curve\_fit to find the centroid. Fig.~\ref{fig:cal} shows the two spectra with gaussian fits; Fig.~\ref{fig:calzoom} shows one of the two peaks with the gaussian fit. On an 8192-channel scale, the Am-241 peak centroid was at channel 207.73 and the Cs-137 peak centroid was at channel 2353.97. A linear regression was done using the centroid values and the true peak energy values, 59.5412 keV and 661.657 keV. The calculated calibration for this detector was
+The calibration was done with Am-241 and Cs-137. For each spectrum, the main peak was found at fit with a Gaussian using scipy.optimize.curve\_fit to find the centroid. Fig.~\ref{fig:calspectra} shows the two spectra; Fig.~\ref{fig:Am241peak} and Fig.~\ref{fig:Cs137peak} show the Gaussian fit for each peak. On an 8192-channel scale, the Am-241 peak centroid was at channel 207.73 and the Cs-137 peak centroid was at channel 2353.97. A linear regression was done using the centroid values and the true peak energy values, 59.5412 keV and 661.657 keV.~\cite{lblndata} The calculated calibration for this detector was
 \begin{equation}
-  Energy \mathrm{ [keV]} = 0.2805 (Channel Number) + 1.2639 
+  \label{eq:cal} 
+  Energy \; \mathrm{ (keV)} = 0.2805 \; (Channel \; Number) + 1.2639 
 \end{equation}
 
-{\color{red}TODO: make spacing in equation better.} 
+\begin{figure}[H]
+  \centering
+  \label{fig:calspectra} 
+  \includegraphics[width=0.6\textwidth]{images/calspectra.png} 
+  \caption{The calibration spectra on a semi-log plot.} 
+\end{figure}
+ 
+\begin{figure}[H]
+  \centering
+  \label{fig:Am241peak} 
+  \includegraphics[width=0.6\textwidth]{images/Am241_peak.png} 
+  \caption{A Gaussian fit to the peak in the Am-241 spectrum.} 
+\end{figure}
 
-{\color{red}TODO: make calibration.py produce figures for here.} 
+\begin{figure}[H]
+  \centering
+  \label{fig:Cs137peak} 
+  \includegraphics[width=0.6\textwidth]{images/Cs137_peak.png} 
+  \caption{A Gaussian fit to the peak in the Cs-137 spectrum.} 
+\end{figure}
 
-%\begin{figure}
-%  \label{fig:cal} 
-%  \includegraphics{code/calspectra.png} 
-%  \caption{The calibration spectra with fitted gaussians.} 
-%\end{figure}
-% 
-%\begin{figure}
-%  \label{fig:calzoom} 
-%  \includegraphics{code/Cs137peak.png} 
-%  \caption{A Gaussian fit to the peak in the Cs-137 spectra.} 
-%\end{figure}
-
-Validation of the calibration was done by applying the calibration to spectra for Ba-133 and Eu-152. As in the intial calibration, a Gaussian fit was applied to energy peaks and the centroid taken as the peak value. The centroid value in channels was converted to keV using the calibration calulated above. Results for the two validation sources are presented in Table~\ref{tab:valBa133} and Table~\ref{tab:valEu152} with the true peak energy value, the measured value with this calibration, and the percent different at each energy. 
+Validation of the calibration was done by applying eq.~\ref{eq:cal} to spectra for Ba-133 and Eu-152. As in the intial calibration, a Gaussian fit was applied to energy peaks and the centroid taken as the peak value. The centroid value in channels was converted to keV using the calibration calulated above. Results for the two validation sources are presented in Table~\ref{tab:valBa133} and Table~\ref{tab:valEu152} with the true peak energy value, the measured value with this calibration, and the percent different at each energy. 
 
 \begin{table}[H]
   \centering 

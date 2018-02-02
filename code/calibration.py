@@ -4,7 +4,9 @@ from modelling import gaus
 from scipy.optimize import curve_fit
 from operator import itemgetter  
 from scipy.stats import linregress 
-import ast 
+import ast
+import sys
+sys.path.append('..')  
 
 def loadref(filepath): 
   '''
@@ -33,23 +35,43 @@ def calibrate(ElementList,source_list,spectra,peaks):
 
   # get the reference peak energies  
   cal_peaks = itemgetter(*ElementList)(peaks) 
-  # load the spectra for calibration 
-  cal_spectra = np.vstack((spectra[source_list.index(ElementList[0])],spectra[source_list.index(ElementList[1])])) 
+  
+  # plot of all spectra used for calibration 
+  fig, ax = plt.subplots()
+  for item in ElementList:
+    ax.semilogy(spectra[source_list.index(item)],label='%s' %(item))
+    ax.set_xlim(0,len(spectra[source_list.index(item)]))
+  ax.set_xlabel('Channel number')
+  ax.set_ylabel('Counts')
+  ax.legend() 
+  plt.savefig('images/calspectra.png') 
 
   # find and fit the peak in each spectra 
   centroids = []   
-  for item in cal_spectra: 
-#    plt.plot(item) 
-    a0 = np.max(item) 
-    b0 = np.argmax(item) 
+  for item in ElementList:
+    spectrum = spectra[source_list.index(item)] 
+    a0 = np.max(spectrum) 
+    b0 = np.argmax(spectrum) 
     c0 = 3 
     p0 = (a0, b0, c0) 
     width = range(b0-(2*c0),b0+1+(2*c0))
-    counts = item[b0-(2*c0):b0+1+(2*c0)]
+    counts = spectrum[b0-(2*c0):b0+1+(2*c0)]
     popt, pcov = curve_fit(gaus,width,counts,p0=p0)
-    width2 = np.arange(b0-(2*c0),b0+1+(2*c0),0.1)
-#    plt.plot(width2,gaus(width2,*popt))
-    # automate a zoomed in image of fit
+    # now save plot of peak 
+    fig, ax = plt.subplots()
+    b1 = popt[1]
+    width1 = range(int(b1)-(2*c0),int(b1)+1+(2*c0))
+    counts = spectrum[int(b1)-(2*c0):int(b1)+1+(2*c0)]
+    width2 = np.arange(b1-(2*c0),b1+1+(2*c0),0.1)
+    ax.plot(width1,counts,'bo', label='Data')
+    ax.plot(width2,gaus(width2,*popt),'g--',label='Fit')
+    # don't need title when putting in report with caption 
+#    ax.set_title('Gaussian Distribution - Fit vs. %s Samples' %(item))
+    ax.set_xlabel('Channel number')
+    ax.set_ylabel('Counts')
+    ax.legend() 
+    # save zoom as [Element]peak.png
+    plt.savefig('images/%s_peak.png' %(item)) 
     centroids.append(popt[1]) 
   
   # fit a linear regression to the saved centroids and the reference peak energies 

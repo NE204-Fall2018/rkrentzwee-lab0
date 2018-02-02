@@ -1,1 +1,49 @@
-Experimental results go here.
+The calibration was done with Am-241 and Cs-137. For each spectrum, the main peak was found at fit with a Gaussian using scipy.optimize.curve\_fit to find the centroid. Fig.~\ref{fig:cal} shows the two spectra with gaussian fits; Fig.~\ref{fig:calzoom} shows one of the two peaks with the gaussian fit. On an 8192-channel scale, the Am-241 peak centroid was at channel 207.73 and the Cs-137 peak centroid was at channel 2353.97. A linear regression was done using the centroid values and the true peak energy values, 59.5412 keV and 661.657 keV. The calculated calibration for this detector was
+\begin{equation}
+  Energy \mathrm{ [keV]} = 0.2805 (Channel Number) + 1.2639 
+\end{equation}
+
+{\color{red}TODO: make spacing in equation better.} 
+
+{\color{red}TODO: make calibration.py produce figures for here.} 
+
+%\begin{figure}
+%  \label{fig:cal} 
+%  \includegraphics{code/calspectra.png} 
+%  \caption{The calibration spectra with fitted gaussians.} 
+%\end{figure}
+% 
+%\begin{figure}
+%  \label{fig:calzoom} 
+%  \includegraphics{code/Cs137peak.png} 
+%  \caption{A Gaussian fit to the peak in the Cs-137 spectra.} 
+%\end{figure}
+
+Validation of the calibration was done by applying the calibration to spectra for Ba-133 and Eu-152. As in the intial calibration, a Gaussian fit was applied to energy peaks and the centroid taken as the peak value. The centroid value in channels was converted to keV using the calibration calulated above. Results for the two validation sources are presented in Table~\ref{tab:valBa133} and Table~\ref{tab:valEu152} with the true peak energy value, the measured value with this calibration, and the percent different at each energy. 
+
+\begin{table}[H]
+  \centering 
+  \caption{Comparison of true peak energy and calibrated peak energy for Ba-133.} 
+  \begin{tabular}{|ccc|} 
+    \hline 
+    True Peak Energy~\cite{lblndata} & Calibration Peak Energy & Percent Error \\ 
+    \hline 
+    \input{validationBa133.csv}
+    \hline  
+  \end{tabular} 
+  \label{tab:valBa133}
+\end{table} 
+
+\begin{table}[H]
+  \centering 
+  \caption{Comparison of true peak energy and calibrated peak energy for Eu-152.} 
+  \begin{tabular}{|ccc|} 
+    \hline 
+    True Peak Energy~\cite{lblndata} & Calibration Peak Energy & Percent Error \\ 
+    \hline 
+    \input{validationEu152.csv}
+    \hline  
+  \end{tabular} 
+  \label{tab:valEu152}
+\end{table} 
+

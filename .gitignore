@@ -8,12 +8,13 @@
 # Ignore data folder
 data/*
 
-# LaTeX cruft 
-*.bbl 
+# LaTeX cruft
+*.bbl
 *.blg
-*.log 
-*.pdf 
+*.log
+*.pdf
+*.aux
 
-# Mac things 
+# Mac things
 .DS_Store
- 
+

@@ -1,7 +1,7 @@
 manuscript = report
 latexopt = -file-line-error -halt-on-error
-dataurl = https://www.dropbox.com/s/k692avun0144n90/lab0_spectral_data.txt
-datamd5 = https://www.dropbox.com/s/6jquiryg6jskii0/lab0_spectral_data.md5
+dataurl = https://www.dropbox.com/s/hutmwip3681xlup/lab0_spectral_data.txt
+datamd5 = https://www.dropbox.com/s/amumdrm9zp1kn8d/lab0_spectral_data.md5
 data = lab0_spectral_data
 
 # Build the PDF of the lab report from the source files

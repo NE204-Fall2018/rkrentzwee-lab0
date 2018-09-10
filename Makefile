@@ -1,5 +1,5 @@
 manuscript = report
-latexopt = -file-line-error -halt-on-error
+latexopt = -file-line-error -halt-on-error -interaction=batchmode
 dataurl = https://www.dropbox.com/s/hutmwip3681xlup/lab0_spectral_data.txt
 datamd5 = https://www.dropbox.com/s/amumdrm9zp1kn8d/lab0_spectral_data.md5
 data = lab0_spectral_data
@@ -14,11 +14,11 @@ $(manuscript).pdf: $(manuscript).tex text/*.tex references.bib images/*.png
 
 # Get/download necessary data
 data :
-	[[ -d data ]] || mkdir data 
-	cd data/ && wget $(datamd5) $(dataurl)
+	[[ -d data ]] || mkdir data
+	cd data/ && wget -q $(datamd5) $(dataurl)
 
 # Validate that downloaded data is not corrupted
-validate :
+validate : data/$(data).txt
 	cd data/ && cat ${data}.txt | md5sum --check ${data}.md5 
 
 # Run tests on analysis code
@@ -26,7 +26,8 @@ test :
 	nosetests --no-byte-compile test/*
 
 # Automate running the analysis code
-analysis :
+analysis : data/$(data).txt
+
 	python code/lab0.py
 
 clean :
@@ -35,5 +36,9 @@ clean :
 	rm $(manuscript).pdf
 	rm code/*.pyc
 
+# make all
+all : data validate analysis $(manuscript).pdf
+	echo Finished analysis and report.
+
 # Make keyword for commands that don't have dependencies
-.PHONY : test data validate analysis clean
+.PHONY : test data clean

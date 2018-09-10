@@ -1,11 +1,15 @@
-# NE 204 Lab 0 
+# NE 204 Lab 0
 
-This repo contains lab report 0 for NE 204 by Rebecca Krentz-Wee. It can be built from source  using `make` and `pdflatex` (texlive).
+This repo contains lab report 0 for NE 204 by Rebecca Krentz-Wee. From a new clone of the repo, run `make all` to download the data, validate the data is correct, run the analysis, and build the report. The finished report is report.pdf.
 
-To download the data, run `make data`. To validate that the data is correct, run `make validate`. This checks the md5 of the downloaded file against the provided md5. 
+## Individual make commands
 
-To replicate the analysis, run `make analysis` after downloading the data. This will produce figures of the gaussian fits of peaks in the data,  
+`make data` downloads the data from Dropbox.
 
-Run `make test` to run the software test suite. 
+`make validate` checks the md5 of the downloaded txt file against the provided md5.
 
-To generate the report, run `make`. 
+`make analysis` replicates the analysis, producing figures of the gaussian fits of peaks in the calibration data and csv files of the sources used to validate the calibration.
+
+`make test` runs the software test suite.
+
+`make` by itself generates the report

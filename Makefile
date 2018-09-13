@@ -14,7 +14,7 @@ $(manuscript).pdf: $(manuscript).tex text/*.tex references.bib images/*.png
 
 # Get/download necessary data
 data :
-	[[ -d data ]] || mkdir data
+	if [ -d "./data" ]; then echo "Data dir exists"; else mkdir data; fi
 	cd data/ && wget -q $(datamd5) $(dataurl)
 
 # Validate that downloaded data is not corrupted

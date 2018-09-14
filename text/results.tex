@@ -1,4 +1,4 @@
-The calibration was done with Am-241 and Cs-137. For each spectrum, the main peak was found at fit with a Gaussian using scipy.optimize.curve\_fit to find the centroid. Fig.~\ref{fig:calspectra} shows the two spectra; Fig.~\ref{fig:Am241peak} and Fig.~\ref{fig:Cs137peak} show the Gaussian fit for each peak. On an 8192-channel scale, the Am-241 peak centroid was at channel 207.73 and the Cs-137 peak centroid was at channel 2353.97. A linear regression was done using the centroid values and the true peak energy values, 59.5412 keV and 661.657 keV.~\cite{lblndata} The calculated calibration for this detector was
+The calibration was done with Am-241 and Cs-137. For each spectrum, the main peak was found and fit with a Gaussian using scipy.optimize.curve\_fit. Fig.~\ref{fig:calspectra} shows the two spectra; Fig.~\ref{fig:Am241peak} and Fig.~\ref{fig:Cs137peak} show the Gaussian fit for each peak. The fits were used to find the centroid of each peak. On an 8192-channel scale, the Am-241 peak centroid was at channel 207.73 and the Cs-137 peak centroid was at channel 2353.97. A linear regression was done using the centroid values and the true peak energy values, 59.5412 keV and 661.657 keV.~\cite{lblndata} The calculated calibration for this detector was
 \begin{equation}
   \label{eq:cal} 
   Energy \; \mathrm{ (keV)} = 0.2805 \; (Channel \; Number) + 1.2639 
@@ -25,7 +25,7 @@ The calibration was done with Am-241 and Cs-137. For each spectrum, the main pea
   \label{fig:Cs137peak} 
 \end{figure}
 
-Validation of the calibration was done by applying eq.~\ref{eq:cal} to spectra for Ba-133 and Eu-152. As in the intial calibration, a Gaussian fit was applied to energy peaks and the centroid taken as the peak value. The centroid value in channels was converted to keV using the calibration calculated above. Results for the two validation sources are presented in Table~\ref{tab:valBa133} and Table~\ref{tab:valEu152} with the true peak energy value, the measured value with this calibration, and the percent different at each energy.
+Validation of the calibration was done by applying eq.~\ref{eq:cal} to spectra for Ba-133 and Eu-152. As in the intial calibration, a Gaussian fit was applied to the energy peaks and the centroid taken as the peak value. The centroid value in channels was converted to keV using the calibration calculated above. Results for the two validation sources are presented in Table~\ref{tab:valBa133} and Table~\ref{tab:valEu152} with the true peak energy value, the measured value with this calibration, and the percent different at each energy.
 
 \begin{table}[H]
   \centering 

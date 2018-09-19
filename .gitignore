@@ -18,3 +18,6 @@ data/*
 # Mac things
 .DS_Store
 
+# Results
+*.csv
+images/*
